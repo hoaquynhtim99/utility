@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
@@ -18,30 +19,30 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     
     if ( empty( $id ) )
     {
-        die( "NO" );
+        die( 'NO' );
     }
     
-    $sql = "SELECT `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-    $result = $db->sql_query( $sql );
-    list( $title, $alias ) = $db->sql_fetchrow( $result );
+    $sql = "SELECT title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
+    $result = $db->query( $sql );
+    list( $title, $alias ) = $result->fetch( 3 );
     
     if ( empty( $title ) )
     {
-        die( "NO" );
+        die( 'NO' );
     }
-    $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_error` WHERE `sid`=" . $id;
-    $db->sql_query( $sql );
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_error WHERE sid=" . $id;
+    $db->query( $sql );
 	
-    $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-    $db->sql_query( $sql );
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
+    $db->query( $sql );
 	
-    $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
-    $result = $db->sql_query( $sql );
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY weight ASC";
+    $result = $db->query( $sql );
     $weight = 0;
-    while ( $row = $db->sql_fetchrow( $result ) )
+    while ( $row = $result->fetch() )
     {
         $weight ++;
-        $db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'] );
+        $db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET weight=" . $weight . " WHERE id=" . $row['id'] );
     }
 
     nv_del_moduleCache( $module_name );
@@ -49,9 +50,9 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     
 	$status = nv_delete_utility_files( $alias );
 	
-	if( $status !== true ) die( "NO" );
+	if( $status !== true ) die( 'NO' );
 	
-    die( "OK" );
+    die( 'OK' );
 }
 
 // Xoa cac bao loi
@@ -63,27 +64,27 @@ if ( $nv_Request->isset_request( 'delerror', 'post' ) )
     
     if ( empty( $id ) )
     {
-        die( "NO" );
+        die( 'NO' );
     }
     
-    $sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-    $result = $db->sql_query( $sql );
-    list( $title ) = $db->sql_fetchrow( $result );
+    $sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
+    $result = $db->query( $sql );
+    $title = $result->fetchColumn();
     
     if ( empty( $title ) )
     {
-        die( "NO" );
+        die( 'NO' );
     }
-    $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_error` WHERE `sid`=" . $id;
-    $db->sql_query( $sql );
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_error WHERE sid=" . $id;
+    $db->query( $sql );
 	
-    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `error`=0 WHERE `id`=" . $id;
-    $db->sql_query( $sql );
+    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET error=0 WHERE id=" . $id;
+    $db->query( $sql );
 	
     nv_del_moduleCache( $module_name );
 	nv_insert_logs( NV_LANG_DATA, $module_name, "Delete error of", $title, $admin_info['userid'] );
     
-    die( "OK" );
+    die( 'OK' );
 }
 
 // Thay doi thu tu cac tien ich
@@ -94,24 +95,24 @@ if ( $nv_Request->isset_request( 'changeweight', 'post' ) )
     $id = $nv_Request->get_int( 'id', 'post', 0 );
     $new = $nv_Request->get_int( 'new', 'post', 0 );
     
-    if ( empty( $id ) ) die( "NO" );
+    if ( empty( $id ) ) die( 'NO' );
         
-    $query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`!=" . $id . " ORDER BY `weight` ASC";
-    $result = $db->sql_query( $query );
+    $query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id!=" . $id . " ORDER BY weight ASC";
+    $result = $db->query( $query );
     $weight = 0;
-    while ( $row = $db->sql_fetchrow( $result ) )
+    while ( $row = $result->fetch() )
     {
         $weight ++;
         if ( $weight == $new ) $weight ++;
-        $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
-        $db->sql_query( $sql );
+        $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET weight=" . $weight . " WHERE id=" . $row['id'];
+        $db->query( $sql );
     }
-    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $new . " WHERE `id`=" . $id;
-    $db->sql_query( $sql );
+    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET weight=" . $new . " WHERE id=" . $id;
+    $db->query( $sql );
     
     nv_del_moduleCache( $module_name );
     
-    die( "OK" );
+    die( 'OK' );
 }
 
 // Active - Deactive
@@ -121,57 +122,57 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
     
     $catid = $nv_Request->get_int( 'id', 'post', 0 );
     
-    if ( empty( $catid ) ) die( "NO" );
+    if ( empty( $catid ) ) die( 'NO' );
     
-    $query = "SELECT `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $catid;
-    $result = $db->sql_query( $query );
-    $numrows = $db->sql_numrows( $result );
+    $query = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $catid;
+    $result = $db->query( $query );
+    $numrows = $result->rowCount();
     if ( $numrows != 1 ) die( 'NO' );
     
-    list( $status ) = $db->sql_fetchrow( $result );
+    $status = $result->fetchColumn();
     $status = $status ? 0 : 1;
     
-    $sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `status`=" . $status . " WHERE `id`=" . $catid;
-    $db->sql_query( $sql );
+    $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET status=" . $status . " WHERE id=" . $catid;
+    $db->query( $sql );
     
     nv_del_moduleCache( $module_name );
     
-    die( "OK" );
+    die( 'OK' );
 }
 
 $page_title = $lang_module['main_list'];
 $array = array();
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
-$result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY weight ASC";
+$result = $db->query( $sql );
+$num = $result->rowCount();
 
 $i = 1;
-while ( $row = $db->sql_fetchrow( $result ) )
+while ( $row = $result->fetch() )
 {
     $list_weight = array();
     for ( $j = 1; $j <= $num; $j ++ )
     {
         $list_weight[$j] = array(
-			"weight" => $j,  //
-			"title" => $j,  //
-			"selected" => ( $j == $row['weight'] ) ? " selected=\"selected\"" : ""  //
+			"weight" => $j,
+			"title" => $j,
+			"selected" => ( $j == $row['weight'] ) ? " selected=\"selected\"" : ""
 		);
     }
 	
 	$array[] = array(
-		"id" => $row['id'],  //
-		"title" => $row['title'],  //
-		"alias" => $row['alias'],  //
-		"viewhit" => $row['viewhit'],  //
-		"downloadhit" => $row['downloadhit'],  //
-		"like" => $row['like'],  //
-		"dislike" => $row['dislike'],  //
-		"error" => $row['error'],  //
-		"weight" => $list_weight,  //
-		"status" => $row['status'] ? " checked=\"checked\"" : "",  //
-		"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'],  //
-		"class" => ( $i % 2 == 0 ) ? " class=\"second\"" : ""  //
+		"id" => $row['id'],
+		"title" => $row['title'],
+		"alias" => $row['alias'],
+		"viewhit" => $row['viewhit'],
+		"downloadhit" => $row['downloadhit'],
+		"like" => $row['like'],
+		"dislike" => $row['dislike'],
+		"error" => $row['error'],
+		"weight" => $list_weight,
+		"status" => $row['status'] ? " checked=\"checked\"" : "",
+		"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'],
+		"class" => ( $i % 2 == 0 ) ? " class=\"second\"" : ""
 	);
 	$i ++;
 }
@@ -222,8 +223,6 @@ foreach( $array_info as $info )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

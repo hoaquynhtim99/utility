@@ -1,14 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
 
+/**
+ * getFuncName()
+ * 
+ * @param mixed $func_file
+ * @return
+ */
 function getFuncName( $func_file )
 {
 	return preg_replace( "/(.*)\.php$/i", "\\1", $func_file );
@@ -36,10 +43,12 @@ if( $nv_Request->isset_request( "submit", "get" ) )
 	}
 	
 	$otherLang = array();
+	
 	if( ! empty( $array['otherLang'] ) )
 	{
 		$otherLang = array_filter( array_unique( array_map( "trim", explode( ",", $array['otherLang'] ) ) ) );
 	}
+	
 	$otherLang[] = NV_LANG_DATA;
 	$array['otherLang'] = $otherLang;
 	unset( $otherLang );
@@ -67,9 +76,9 @@ if( $nv_Request->isset_request( "submit", "get" ) )
 		
 		foreach( $array['otherLang'] as $lang )
 		{
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` ( `func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight` ) VALUES( NULL, " . $db->dbescape( $array['func_name'] ) . ", " . $db->dbescape( $array['func_custom_name'] ) . ", " .  $db->dbescape( $array['in_module'] ). ", " . $array['show_func'] . ", " . $array['in_submenu'] . ", " . $array['subweight'] . " )";
+			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs ( func_id, func_name, func_custom_name, in_module, show_func, in_submenu, subweight ) VALUES( NULL, " . $db->quote( $array['func_name'] ) . ", " . $db->quote( $array['func_custom_name'] ) . ", " .  $db->quote( $array['in_module'] ). ", " . $array['show_func'] . ", " . $array['in_submenu'] . ", " . $array['subweight'] . " )";
 			
-			if( ! $db->sql_query( $sql ) )
+			if( ! $db->query( $sql ) )
 			{
 				$check_insert_error_lang[$lang] = $language_array[$lang]['name'];
 			}
@@ -89,14 +98,14 @@ if( $nv_Request->isset_request( "submit", "get" ) )
 			
 			foreach( $check_insert_success_lang as $lang => $langName )
 			{
-				$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` WHERE `func_name`=" . $db->dbescape( $array['func_name'] ) . " AND `in_module`=" . $db->dbescape( $array['in_module'] ) );
+				$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_modfuncs WHERE func_name=" . $db->quote( $array['func_name'] ) . " AND in_module=" . $db->quote( $array['in_module'] ) );
 			}
 		}
 	}
 	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo json_encode( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include NV_ROOTDIR . '/includes/footer.php';
 	die();
 }
 
@@ -119,11 +128,11 @@ if( $nv_Request->isset_request( "load_func", "get" ) )
 	else
 	{
 		$list_data_funcs = array();
-		$sql = "SELECT `func_name` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `in_module`=" . $db->dbescape( $mod_name );
-		$result = $db->sql_query( $sql );
-		while( $row = $db->sql_fetchrow( $result ) )
+		$sql = "SELECT func_name FROM " . NV_MODFUNCS_TABLE . " WHERE in_module=" . $db->quote( $mod_name );
+		$result = $db->query( $sql );
+		while( $row = $result->fetch() )
 		{
-			$row['func_name'] = $db->unfixdb( $row['func_name'] );
+			$row['func_name'] = $row['func_name'];
 			$list_data_funcs[$row['func_name']] = $row['func_name'];
 		}
 		
@@ -146,13 +155,13 @@ if( $nv_Request->isset_request( "load_func", "get" ) )
 			
 			// Ngon ngu khac
 			$contents['isOtherLang'] = false;
-			$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1 AND `lang`!=" . $db->dbescape( NV_LANG_DATA );
-			$result = $db->sql_query( $sql );
+			$sql = "SELECT lang FROM " . $db_config['prefix'] . "_setup_language WHERE setup=1 AND lang!=" . $db->quote( NV_LANG_DATA );
+			$result = $db->query( $sql );
 			$array_other_lang = array();
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
-				$row['lang'] = $db->unfixdb( $row['lang'] );
-				if( $db->sql_numrows( $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $row['lang'] . "_modules` WHERE `title`=" . $db->dbescape( $mod_name ) ) ) )
+				$row['lang'] = $row['lang'];
+				if( $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $row['lang'] . "_modules WHERE title=" . $db->quote( $mod_name ) )->rowCount() )
 				{
 					$array_other_lang[$row['lang']] = $language_array[$row['lang']]['name'];
 				}
@@ -167,9 +176,9 @@ if( $nv_Request->isset_request( "load_func", "get" ) )
 		}
 	}
 	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo json_encode( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include NV_ROOTDIR . '/includes/footer.php';
 	die();
 }
 
@@ -182,63 +191,49 @@ foreach( $site_mods as $name => $module )
 
 $contents = "
 <div id=\"u-data\">
-<div class=\"infoalert\">" . $u_lang['info'] . "</div>
-<table class=\"tab1\">
+<div class=\"alert alert-warning\">" . $u_lang['info'] . "</div>
+<table class=\"table table-striped table-bordered table-hover\">
 	<col width=\"150\"/>
 	<col width=\"200\"/>
 	<tbody>
 		<tr>
 			<td>" . $u_lang['select_module'] . "</td>
-			<td><select class=\"txt-full\" name=\"module_name\"/>" . $module_option . "<select></td>
+			<td><select class=\"form-control\" name=\"module_name\"/>" . $module_option . "<select></td>
 			<td></td>
 		</tr>
-	</tbody>
-	<tbody class=\"second\">
 		<tr>
 			<td>" . $u_lang['func_name'] . "</td>
 			<td id=\"func_name\"></td>
 			<td class=\"info-explain\" id=\"func_name_explain\"></td>
 		</tr>
-	</tbody>
-	<tbody>
 		<tr>
 			<td>" . $u_lang['func_custom_name'] . "</td>
 			<td id=\"func_custom_name\"></td>
 			<td class=\"info-explain\" id=\"func_custom_name_explain\"></td>
 		</tr>
-	</tbody>
-	<tbody class=\"second\">
 		<tr>
 			<td>" . $u_lang['show_func'] . "</td>
 			<td id=\"show_func\"></td>
 			<td class=\"info-explain\" id=\"show_func_explain\"></td>
 		</tr>
-	</tbody>
-	<tbody>
 		<tr>
 			<td>" . $u_lang['in_submenu'] . "</td>
 			<td id=\"in_submenu\"></td>
 			<td class=\"info-explain\" id=\"in_submenu_explain\"></td>
 		</tr>
-	</tbody>
-	<tbody class=\"second\">
 		<tr>
 			<td>" . $u_lang['subweight'] . "</td>
 			<td id=\"subweight\"></td>
 			<td class=\"info-explain\" id=\"subweight_explain\"></td>
 		</tr>
-	</tbody>
-	<tbody class=\"second\">
 		<tr>
 			<td>" . $u_lang['otherLang'] . "</td>
 			<td id=\"otherLang\"></td>
 			<td class=\"info-explain\" id=\"otherLang_explain\"></td>
 		</tr>
-	</tbody>
-	<tbody>
 		<tr>
 			<td></td>
-			<td><input type=\"button\" name=\"submit\" value=\"" . $u_lang['submit'] . "\"/></td>
+			<td><input class=\"btn btn-primary\" type=\"button\" name=\"submit\" value=\"" . $u_lang['submit'] . "\"/></td>
 			<td></td>
 		</tr>
 	</tbody>
@@ -253,7 +248,7 @@ var setOtherLang = false;
 		\$.getJSON( '" . $base_url_js . "&load_func=1&module_name=' + \$(this).val(), function(data){
 			\$('#func_name,#func_custom_name,#show_func,#in_submenu,#subweight,#otherLang').html('');
 			if(data.status=='ERROR'){
-				\$('#func_name_explain').html('<div class=\"infoerror\">' + data.message + '</div>');
+				\$('#func_name_explain').html('<div class=\"alert alert-danger\">' + data.message + '</div>');
 			}else{
 				var option_func_name = '<option rel=\"\" value=\"\">--------</option>';
 				\$.each(data.new_funcs,function(k,v){ option_func_name += '<option rel=\"' + v + '\" value=\"' + k + '\">' + v + '</option>'; });
@@ -302,11 +297,11 @@ var setOtherLang = false;
 		\$.getJSON( '" . $base_url_js . "&submit=1&module_name=' + module_name + '&func_name=' + func_name + '&func_custom_name=' + func_custom_name + '&show_func=' + show_func + '&in_submenu=' + in_submenu + '&subweight=' + subweight + '&otherLang=' + otherLang, function(data){
 			\$('[name=\"submit\"]').removeAttr('disabled');
 			if( data.status == 'ERROR' ){
-				\$('#result-data').html('<div class=\"infoerror\">' + data.message + '</div>');
+				\$('#result-data').html('<div class=\"alert alert-danger\">' + data.message + '</div>');
 			}else if(data.setUpLayout){
-				\$('#result-data').html('<div class=\"infook\"><p>" . $u_lang['submit_ok'] . "</p><p><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&amp;" . NV_OP_VARIABLE . "=setuplayout\">" . $u_lang['submit_ok_link'] . "</a></p></div>');
+				\$('#result-data').html('<div class=\"alert alert-success\"><p>" . $u_lang['submit_ok'] . "</p><p><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=themes&amp;" . NV_OP_VARIABLE . "=setuplayout\">" . $u_lang['submit_ok_link'] . "</a></p></div>');
 			}else{
-				\$('#result-data').html('<div class=\"infook\"><p>" . $u_lang['submit_ok_clean_cache'] . "</p><p><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=clearsystem\">" . $u_lang['submit_ok_clean_cache_link'] . "</a></p></div>');
+				\$('#result-data').html('<div class=\"alert alert-success\"><p>" . $u_lang['submit_ok_clean_cache'] . "</p><p><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=clearsystem\">" . $u_lang['submit_ok_clean_cache_link'] . "</a></p></div>');
 			}
 		});
 	});

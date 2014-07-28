@@ -1,73 +1,66 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 22/2/2011, 22:49
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['content_title'];
 
-$id = $nv_Request->get_int( 'id', 'get', 0 );
 $error = "";
-
 $groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if ( ! empty( $groups_list ) )
-{
-	$array_who[] = $lang_global['who_view3'];
-}
+$id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( $id )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
-	$result = $db->sql_query( $sql );
-	$check = $db->sql_numrows( $result );
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
+	$result = $db->query( $sql );
+	$check = $result->rowCount();
 		
 	if ( $check != 1 )
 	{
 		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 	}
 		
-	$row = $db->sql_fetchrow( $result );
+	$row = $result->fetch();
 		
 	$array_old = $array = array(
-		"alias" => $row['alias'],  //
-		"title" => $row['title'],  //
-		"images" => $row['images'],  //
-		"logo" => $row['logo'],  //
-		"introtext" => nv_br2nl( $row['introtext'] ),  //
-		"description" => nv_editor_br2nl( $row['description'] ),  //
-		"guide" => nv_editor_br2nl( $row['guide'] ),  //
-		"iscache" => $row['iscache'],  //
-		"delcache" => $row['delcache'],  //
-		"who_view" => $row['who_view'],  //
-		"groups_view" => ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array()  //
+		"alias" => $row['alias'],
+		"title" => $row['title'],
+		"images" => $row['images'],
+		"logo" => $row['logo'],
+		"introtext" => nv_br2nl( $row['introtext'] ),
+		"description" => nv_editor_br2nl( $row['description'] ),
+		"guide" => nv_editor_br2nl( $row['guide'] ),
+		"iscache" => $row['iscache'],
+		"delcache" => $row['delcache'],
+		"groups_view" => ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array()
 	);
 
-	$form_action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
+	$form_action = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
 	$table_caption = $lang_module['content_edit'];
 }
 else
 {
-	$form_action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+	$form_action = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 	$table_caption = $lang_module['content_add'];
 	
 	$array = array(
-		"alias" => "",  //
-		"title" => "",  //
-		"images" => "",  //
-		"logo" => "",  //
-		"introtext" => "",  //
-		"description" => "",  //
-		"guide" => "",  //
-		"iscache" => 1,  //
-		"delcache" => 0,  //
-		"who_view" => 0,  //
-		"groups_view" => array()  //
+		"alias" => "",
+		"title" => "",
+		"images" => "",
+		"logo" => "",
+		"introtext" => "",
+		"description" => "",
+		"guide" => "",
+		"iscache" => 1,
+		"delcache" => 0,
+		"groups_view" => array( 6 )
 	);
 }
 
@@ -76,17 +69,16 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array['delcache'] = $nv_Request->get_int( 'delcache', 'post', 0 );
 	$array['iscache'] = $nv_Request->get_int( 'iscache', 'post', 0 );
 	
-	$array['alias'] = filter_text_input( 'alias', 'post', '', 1, 50 );
-	$array['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
+	$array['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 50 );
+	$array['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	
-	$array['images'] = nv_unhtmlspecialchars( filter_text_input( 'images', 'post', '', 1, 255 ) );
-	$array['logo'] = nv_unhtmlspecialchars( filter_text_input( 'logo', 'post', '', 1, 255 ) );
+	$array['images'] = nv_unhtmlspecialchars( nv_substr( $nv_Request->get_title( 'images', 'post', '', 1 ), 0, 255 ) );
+	$array['logo'] = nv_unhtmlspecialchars( nv_substr( $nv_Request->get_title( 'logo', 'post', '', 1 ), 0, 255 ) );
 	
-	$array['introtext'] = filter_text_textarea( 'introtext', '', NV_ALLOWED_HTML_TAGS );
-	$array['description'] = nv_editor_filter_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-	$array['guide'] = nv_editor_filter_textarea( 'guide', '', NV_ALLOWED_HTML_TAGS );
+	$array['introtext'] = $nv_Request->get_textarea( 'introtext', '', NV_ALLOWED_HTML_TAGS );
+	$array['description'] = $nv_Request->get_editor( 'description', '', NV_ALLOWED_HTML_TAGS );
+	$array['guide'] = $nv_Request->get_editor( 'guide', '', NV_ALLOWED_HTML_TAGS );
 	
-	$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 	$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
 
 	$array['images'] = empty( $array['images'] ) ? "" : substr ( $array['images'], strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
@@ -111,12 +103,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array['description'] = nv_editor_nl2br( $array['description'] );
 		$array['guide'] = nv_editor_nl2br( $array['guide'] );
 		
-		if ( ! in_array( $array['who_view'], array_keys( $array_who ) ) ) $array['who_view'] = 0;
-		
 		if( empty( $id ) )
 		{
-			$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $array['alias'] );
-			$result = $db->sql_query( $sql );
+			$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $array['alias'] );
+			$result = $db->query( $sql );
 			list ( $check_exist ) = $db->sql_fetchrow( $result );
 			
 			if ( $check_exist )
@@ -125,37 +115,36 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$sql = "SELECT MAX(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
-				$result = $db->sql_query( $sql );
+				$sql = "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "";
+				$result = $db->query( $sql );
 				list ( $weight ) = $db->sql_fetchrow( $result );
 				$new_weight = $weight + 1;
 
-				$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
+				$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " VALUES (
 					NULL, 
-					" . $db->dbescape( $array['alias'] ) . ", 
-					" . $db->dbescape( $array['title'] ) . ", 
-					" . $db->dbescape( $array['images'] ) . ", 
-					" . $db->dbescape( $array['logo'] ) . ", 
-					" . $db->dbescape( $array['introtext'] ) . ", 
-					" . $db->dbescape( $array['description'] ) . ", 
-					" . $db->dbescape( $array['guide'] ) . ", 
+					" . $db->quote( $array['alias'] ) . ", 
+					" . $db->quote( $array['title'] ) . ", 
+					" . $db->quote( $array['images'] ) . ", 
+					" . $db->quote( $array['logo'] ) . ", 
+					" . $db->quote( $array['introtext'] ) . ", 
+					" . $db->quote( $array['description'] ) . ", 
+					" . $db->quote( $array['guide'] ) . ", 
 					" . NV_CURRENTTIME . ", 0, 0, 0, 0,
 					" . $array['iscache'] . ",
 					" . $array['delcache'] . ",
 					0,
-					" . $array['who_view'] . ",
-					" . $db->dbescape( implode( ",", $array['groups_view'] ) ) . ", 
+					" . $db->quote( implode( ",", $array['groups_view'] ) ) . ", 
 					" . $new_weight . ", 1
 				)";
 				
-				$id_result = $db->sql_query_insert_id( $sql );
+				$id_result = $db->insert_id( $sql );
 				
 				if ( $id_result )
 				{
-					$db->sql_freeresult();
+					//$xxx->closeCursor();
 					nv_del_moduleCache( $module_name );
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_add'], $array['title'], $admin_info['userid'] );
-					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
 					die();
 				}
 				else
@@ -166,8 +155,8 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		else
 		{
-			$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $array['alias'] ) . " AND `id`!=" . $id;
-			$result = $db->sql_query( $sql );
+			$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $array['alias'] ) . " AND id!=" . $id;
+			$result = $db->query( $sql );
 			list ( $check_exist ) = $db->sql_fetchrow( $result );
 			
 			if ( $check_exist )
@@ -176,21 +165,20 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET 
-					`alias`=" . $db->dbescape( $array['alias'] ) . ", 
-					`title`=" . $db->dbescape( $array['title'] ) . ", 
-					`images`=" . $db->dbescape( $array['images'] ) . ", 
-					`logo`=" . $db->dbescape( $array['logo'] ) . ", 
-					`introtext`=" . $db->dbescape( $array['introtext'] ) . ", 
-					`description`=" . $db->dbescape( $array['description'] ) . ",
-					`guide`=" . $db->dbescape( $array['guide'] ) . ",
-					`iscache`=" . $array['iscache'] . ",
-					`who_view`=" . $array['who_view'] . ",
-					`delcache`=" . $array['delcache'] . ",
-					`groups_view`=" . $db->dbescape( implode( ",", $array['groups_view'] ) ) . "
-				WHERE `id` =" . $id;
+				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET 
+					alias=" . $db->quote( $array['alias'] ) . ", 
+					title=" . $db->quote( $array['title'] ) . ", 
+					images=" . $db->quote( $array['images'] ) . ", 
+					logo=" . $db->quote( $array['logo'] ) . ", 
+					introtext=" . $db->quote( $array['introtext'] ) . ", 
+					description=" . $db->quote( $array['description'] ) . ",
+					guide=" . $db->quote( $array['guide'] ) . ",
+					iscache=" . $array['iscache'] . ",
+					delcache=" . $array['delcache'] . ",
+					groups_view=" . $db->quote( implode( ",", $array['groups_view'] ) ) . "
+				WHERE id =" . $id;
 					
-				if ( $db->sql_query( $sql ) )
+				if ( $db->query( $sql ) )
 				{
 					// Xoa ung dung cu neu sua ailas
 					if( $array['alias'] != $array_old['alias'] )
@@ -205,10 +193,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 				
 					if( empty( $error ) )
 					{
-						$db->sql_freeresult();
+						//$xxx->closeCursor();
 						nv_del_moduleCache( $module_name );
 						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $array_old['title'] . "&nbsp;=&gt;&nbsp;" . $array['title'], $admin_info['userid'] );
-						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
 						exit();
 					}
 				}
@@ -248,27 +236,16 @@ if ( ! empty ( $array['logo'] ) ) $array['logo'] = NV_BASE_SITEURL . NV_UPLOADS_
 // Int to string
 $array['iscache'] = $array['iscache'] ? " checked=\"checked\"" : "";
 
-$who_view = $array['who_view'];
-$array['who_view'] = array();
-foreach ( $array_who as $key => $who )
-{
-	$array['who_view'][] = array(  //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_view ? " selected=\"selected\"" : ""  //
-	);
-}
-    
 $groups_view = $array['groups_view'];
 $array['groups_view'] = array();
 if ( ! empty( $groups_list ) )
 {
 	foreach ( $groups_list as $key => $title )
 	{
-		$array['groups_view'][] = array(  //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""  //
+		$array['groups_view'][] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 		);
 	}
 }
@@ -289,12 +266,6 @@ if ( ! empty ( $error ) )
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
 }
-
-foreach ( $array['who_view'] as $who )
-{
-	$xtpl->assign( 'who_view', $who );
-	$xtpl->parse( 'main.who_view' );
-}
     
 if ( ! empty( $array['groups_view'] ) )
 {
@@ -309,8 +280,6 @@ if ( ! empty( $array['groups_view'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

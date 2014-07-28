@@ -1,10 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Language Tiếng Việt
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
@@ -19,6 +21,3 @@ $u_lang['found_img'] = 'Phát hiện thấy có %d ảnh trong thư mục, hệ 
 $u_lang['prosessing_ok'] = 'Kiểm tra hoàn tất và đã xóa được %d ảnh:';
 $u_lang['prosessing_wating'] = 'Vui lòng đợi, hệ thống sẽ tiếp tục thực hiện quá trình';
 $u_lang['inof_prosessing_error_del'] = 'Hệ thống đã không thể xóa các ảnh sau, hãy xóa thủ công chúng: <br /> %s';
-
-
-?>

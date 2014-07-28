@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Jun 04, 2011, 04:52:53 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Language Tiếng Việt
+ * @Createdate Jul 29, 2014, 12:13:24 AM
+ */
 
- if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) die('Stop!!!');
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) die('Stop!!!');
 
 $lang_translator['author'] ="VINADES.,JSC (contact@vinades.vn)";
 $lang_translator['createdate'] ="07/03/2011, 20:15";
@@ -53,7 +54,6 @@ $lang_module['content_add'] = "Thêm mới một tiện ích";
 $lang_module['content_ftitle'] = "Tiêu đề";
 $lang_module['content_flogo'] = "Logo";
 $lang_module['content_whoview'] = "Quyền xem";
-$lang_module['content_groupview'] = "Nếu chọn nhóm hãy đánh dấu vào các nhóm cho phép";
 $lang_module['content_iscache'] = "Tạo bộ nhớ đệm cho liên kết";
 $lang_module['content_delcache'] = "Thời gian tồn tại của bộ nhớ đệm";
 $lang_module['content_delcache_info'] = "Nhập 0 nếu không xóa";

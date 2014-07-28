@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
@@ -13,5 +14,3 @@ $u_config = array(
 	'd_lang' => 'vi', // Ngon ngu mac dinh - bat buoc
 	'title' => 'Cập nhật mô tả dự án của các file php', // Tieu de - bat buoc
 );
-
-?>

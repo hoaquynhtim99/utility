@@ -8,9 +8,8 @@
  * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
-if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-$u_config = array(
-	'd_lang' => 'vi', // Ngon ngu mac dinh - bat buoc
-	'title' => 'Cập nhật Avatar của thành viên từ diễn đàn', // Tieu de - bat buoc
-);
+$submenu['utility'] = $lang_module['utility'];
+$submenu['content'] = $lang_module['content'];
+$submenu['error'] = $lang_module['error'];

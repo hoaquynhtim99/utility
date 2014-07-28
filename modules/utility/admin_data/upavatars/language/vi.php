@@ -1,10 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Language Tiếng Việt
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
@@ -20,5 +22,3 @@ $u_lang['error_empty_sesion'] = 'Không có thành viên nào để cập nhật
 $u_lang['inof_prosessing'] = 'Thực hiện cập nhật %d thành viên bắt đầu từ %d trong tổng số %d, vui lòng đợi, hệ thống sẽ tiếp tục quá trình trong giây lát. Đã cập nhật được %d thành viên';
 $u_lang['inof_prosessing_ok'] = 'Thực hiện cập nhật thành công %d thành viên';
 $u_lang['inof_prosessing_error_del'] = 'Hệ thống không thể xóa những file sau: <br /> %s <br />Bạn nên xóa chúng khỏi hệ thống để giải phóng bộ nhớ vì chúng không còn cần thiết nữa';
-
-?>

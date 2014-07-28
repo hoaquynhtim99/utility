@@ -1,17 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 07-03-2011 20:15
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 	
+/**
+ * nv_curl_get()
+ * 
+ * @param mixed $target_url
+ * @return
+ */
 function nv_curl_get( $target_url )
 {
 	$content = "";
+	
 	if( function_exists('curl_init') )
 	{
 		$ch = curl_init();
@@ -36,7 +44,7 @@ function nv_delete_utility_files( $alias )
 {
 	global $module_file, $db;
 	
-	$alias = $db->unfixdb( $alias );
+	$alias = $alias;
 	
 	if( ! is_dir( NV_ROOTDIR . '/modules/' . $module_file . '/data/' . $alias ) )
 	{
@@ -68,5 +76,3 @@ function nv_delete_utility_files( $alias )
 	
 	return true;
 }
-
-?>

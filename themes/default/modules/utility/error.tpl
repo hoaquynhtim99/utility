@@ -15,22 +15,21 @@
 		</style>
 	</head>
     <body>
-		<h3 class="center">{LANG.send_error}: {DATA.title}</h3>
+		<h3 class="text-center">{LANG.send_error}: {DATA.title}</h3>
 		<p>&nbsp;</p>
 		<!-- BEGIN: complete -->
 		<p class="infook">{LANG.error_thank}</p>
-		<p class="center"><strong><a class="infook" href="javascript:window.close();" title="{LANG.error_close}">[{LANG.error_close}]</a></strong></p>
+		<p class="text-center"><strong><a class="infook" href="javascript:window.close();" title="{LANG.error_close}">[{LANG.error_close}]</a></strong></p>
 		<!-- END: complete -->
 		<!-- BEGIN: error -->
 		<p class="infoerror">{ERROR}</p>
-		<p class="center"><strong><a class="infook" href="javascript:window.close();" title="{LANG.error_close}">[{LANG.error_close}]</a></strong></p>
+		<p class="text-center"><strong><a class="infook" href="javascript:window.close();" title="{LANG.error_close}">[{LANG.error_close}]</a></strong></p>
 		<!-- END: error -->
 		<!-- BEGIN: form -->
-		<form class="center" action="{DATA.form_action}" method="post" onsubmit="return checkform();">
-			<input onfocus="if(this.value == '{LANG.error_entername}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.error_entername}';}" type="text" name="name" value="{LANG.error_entername}" maxlength="100" style="width:96%"/>
-			<input onfocus="if(this.value == '{LANG.error_enteremail}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.error_enteremail}';}" type="text" name="email" value="{LANG.error_enteremail}" maxlength="100" style="width:96%"/>
-			<textarea onfocus="if(this.value == '{LANG.error_content}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.error_content}';}" name="body" style="width:96%;height:100px">{LANG.error_content}</textarea>
-			<input type="submit" name="submit" value="{LANG.error_submit}"/>
+		<form class="form-inline center" action="{DATA.form_action}" method="post" onsubmit="return checkform();">
+			<input class="form-control" onfocus="if(this.value == '{LANG.error_entername}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.error_entername}';}" type="text" name="name" value="{LANG.error_entername}" maxlength="100" style="width:96%"/>
+			<input class="form-control" onfocus="if(this.value == '{LANG.error_enteremail}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.error_enteremail}';}" type="text" name="email" value="{LANG.error_enteremail}" maxlength="100" style="width:96%"/><textarea onfocus="if(this.value == '{LANG.error_content}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.error_content}';}" name="body" style="width:96%;height:100px">{LANG.error_content}</textarea>
+			<input class="btn btn-primary" type="submit" name="submit" value="{LANG.error_submit}"/>
 		</form>
 		<script type="text/javascript">
 		function checkform(){

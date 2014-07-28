@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
@@ -15,20 +16,20 @@ require( NV_ROOTDIR . '/modules/' . $module_file . '/admin_data/' . $u . '/funct
 
 function nv_u_exit($info)
 {
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme('<table class="tab1"><tbody><tr><td>' . $info . '</td></tr></tbody></table>');
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
 if( $nv_Request->isset_request( 'loadblock', 'get' ) )
 {
-	$mod = filter_text_input( 'loadblock', 'get', '' );
+	$mod = $nv_Request->get_title( 'loadblock', 'get', '' );
 	
-	$sql = "SELECT bid, title FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$mod) . "_block_cat` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
+	$sql = "SELECT bid, title FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$mod) . "_block_cat ORDER BY weight ASC";
+	$result = $db->query( $sql );
 	
-	while ( list( $bid_i, $title_i ) = $db->sql_fetchrow( $result ) )
+	while ( list( $bid_i, $title_i ) = $result->fetch( 3 ) )
 	{
 		$c .= '<input type="checkbox" class="block" value="' . $bid_i . '"/> ' . $title_i . ' ';
 	}
@@ -37,13 +38,13 @@ if( $nv_Request->isset_request( 'loadblock', 'get' ) )
 
 if( $nv_Request->isset_request( 'loadsources', 'get' ) )
 {
-	$mod = filter_text_input( 'loadsources', 'get', '' );
+	$mod = $nv_Request->get_title( 'loadsources', 'get', '' );
 	
-	$result = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$mod) . "_sources` ORDER BY `weight`" );
+	$result = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$mod) . "_sources ORDER BY weight" );
 	
 	$c .= '<select id="sources">';
 	$c .= '<option value="">' . $u_lang['move_to_default'] . '</option>';
-	while ( $row = $db->sql_fetchrow( $result ) )
+	while ( $row = $result->fetch() )
 	{
 		$c .= '<option value="' . $row['sourceid'] . '">' . $row['title'] . '</option>';
 	}
@@ -54,14 +55,14 @@ if( $nv_Request->isset_request( 'loadsources', 'get' ) )
 
 if( $nv_Request->isset_request( 'loadtopics', 'get' ) )
 {
-	$mod = filter_text_input( 'loadtopics', 'get', '' );
+	$mod = $nv_Request->get_title( 'loadtopics', 'get', '' );
 	
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$mod) . "_topics` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$mod) . "_topics ORDER BY weight ASC";
+	$result = $db->query( $sql );
 	
 	$c .= '<select id="topics">';
 	$c .= '<option value="">' . $u_lang['move_to_default'] . '</option>';
-	while ( $row = $db->sql_fetchrow( $result ) )
+	while ( $row = $result->fetch() )
 	{
 		$c .= '<option value="' . $row['topicid'] . '">' . $row['title'] . '</option>';
 	}
@@ -94,10 +95,10 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 			
 			$c .= '<div class="infook">' . sprintf( $u_lang['pross_s1'], $cat_data[$_cat]['title'] );
 			
-			$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $fmod_data . "_" . $_cat . "` LIMIT 0," . $per_page;
-			$gresult = $db->sql_query( $sql );
+			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $fmod_data . "_" . $_cat . " LIMIT 0," . $per_page;
+			$gresult = $db->query( $sql );
 			
-			while ( $row = $db->sql_fetchrow( $gresult ) )
+			while ( $row = $gresult->fetch() )
 			{
 				if( in_array( $row['id'], $config['h_nid'] ) ) continue;
 				
@@ -180,14 +181,14 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 				$is_error = false;
 				
 				// Copy sang bang rows
-				$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $tmod_data . "_rows` 
-				(`id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `inhome`, `allowed_comm`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords`) VALUES (
+				$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $tmod_data . "_rows 
+				(id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating, keywords) VALUES (
 					NULL, 
 					" . intval($config['tcat']) . ",
-					" . $db->dbescape_string($config['tcat']) . ",
+					" . $db->quote($config['tcat']) . ",
 					" . intval($config['topics']) . ",
 					" . intval($row['admin_id']) . ",
-					" . $db->dbescape_string($row['author']) . ",
+					" . $db->quote($row['author']) . ",
 					" . intval($config['sources']) . ",
 					" . intval($row['addtime']) . ",
 					" . intval($row['edittime']) . ",
@@ -195,12 +196,12 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 					" . intval($row['publtime']) . ",
 					" . intval($row['exptime']) . ", 
 					" . intval($row['archive']) . ",
-					" . $db->dbescape_string($row['title']) . ",
-					" . $db->dbescape_string($row['alias']) . ",
-					" . $db->dbescape_string($row['hometext']) . ",
-					" . $db->dbescape_string($row['homeimgfile']) . ",
-					" . $db->dbescape_string($row['homeimgalt']) . ",
-					" . $db->dbescape_string($row['homeimgthumb']) . ",
+					" . $db->quote($row['title']) . ",
+					" . $db->quote($row['alias']) . ",
+					" . $db->quote($row['hometext']) . ",
+					" . $db->quote($row['homeimgfile']) . ",
+					" . $db->quote($row['homeimgalt']) . ",
+					" . $db->quote($row['homeimgthumb']) . ",
 					" . intval($row['inhome']) . ",  
 					" . intval($row['allowed_comm']) . ", 
 					" . intval($row['allowed_rating']) . ", 
@@ -208,27 +209,27 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 					" . intval($row['hitscm']) . ",  
 					" . intval($row['total_rating']) . ",  
 					" . intval($row['click_rating']) . ",  
-					" . $db->dbescape_string($row['keywords']) . "
+					" . $db->quote($row['keywords']) . "
 				)";
 				
-				$new_id = $db->sql_query_insert_id($sql);
+				$new_id = $db->insert_id($sql);
 				
 				if( $new_id )
 				{
 					// Tao bang bodyhtml
 					$tbhtml = NV_PREFIXLANG . "_" . $tmod_data . "_bodyhtml_" . ceil($new_id / 2000);
-					$db->sql_query("CREATE TABLE IF NOT EXISTS `" . $tbhtml . "` (`id` int(11) unsigned NOT NULL, `bodyhtml` longtext NOT NULL, `sourcetext` varchar(255) NOT NULL default '', `imgposition` tinyint(1) NOT NULL default '1', `copyright` tinyint(1) NOT NULL default '0', `allowed_send` tinyint(1) NOT NULL default '0', `allowed_print` tinyint(1) NOT NULL default '0', `allowed_save` tinyint(1) NOT NULL default '0', PRIMARY KEY  (`id`)) ENGINE=MyISAM");
+					$db->query("CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', PRIMARY KEY  (id)) ENGINE=MyISAM");
 					
 					$ct_query = array();
 					// Lay bodyhtml cua tin
-					$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $fmod_data . "_bodyhtml_" . ceil(intval($row['id']) / 2000) . "` WHERE `id`=" . $row['id'];
-					$result = $db->sql_query( $sql );
-					$rowcontent = $db->sql_fetchrow( $result );
+					$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $fmod_data . "_bodyhtml_" . ceil(intval($row['id']) / 2000) . " WHERE id=" . $row['id'];
+					$result = $db->query( $sql );
+					$rowcontent = $result->fetch();
 					
-					$ct_query[] = (int)$db->sql_query("INSERT INTO `" . $tbhtml . "` VALUES (
+					$ct_query[] = (int)$db->query("INSERT INTO " . $tbhtml . " VALUES (
 						" . $new_id . ", 
-						" . $db->dbescape_string($rowcontent['bodyhtml']) . ", 
-						" . $db->dbescape_string($rowcontent['sourcetext']) . ",
+						" . $db->quote($rowcontent['bodyhtml']) . ", 
+						" . $db->quote($rowcontent['sourcetext']) . ",
 						" . intval($rowcontent['imgposition']) . ",
 						" . intval($rowcontent['copyright']) . ",  
 						" . intval($rowcontent['allowed_send']) . ",  
@@ -237,14 +238,14 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 					)");
 					
 					// Them vao bang cat
-					$ct_query[] = (int)$db->sql_query("INSERT INTO `" . NV_PREFIXLANG . "_" . $tmod_data . "_" . $config['tcat'] . "` SELECT * FROM `" . NV_PREFIXLANG . "_" . $tmod_data . "_rows` WHERE `id`=" . $new_id . "");				
+					$ct_query[] = (int)$db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $tmod_data . "_" . $config['tcat'] . " SELECT * FROM " . NV_PREFIXLANG . "_" . $tmod_data . "_rows WHERE id=" . $new_id . "");				
 					
 					// Them cao bodytext
-					$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $fmod_data . "_bodytext` WHERE `id`=" . $row['id'];
-					$result = $db->sql_query( $sql );
-					$rowcontent = $db->sql_fetchrow( $result );
+					$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $fmod_data . "_bodytext WHERE id=" . $row['id'];
+					$result = $db->query( $sql );
+					$rowcontent = $result->fetch();
 					
-					$ct_query[] = (int)$db->sql_query("INSERT INTO `" . NV_PREFIXLANG . "_" . $tmod_data . "_bodytext` VALUES (" . $new_id . ", " . $db->dbescape_string($rowcontent['bodytext']) . ")");
+					$ct_query[] = (int)$db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $tmod_data . "_bodytext VALUES (" . $new_id . ", " . $db->quote($rowcontent['bodytext']) . ")");
 					
 					if (array_sum($ct_query) != sizeof($ct_query)) $is_error = true;
 					unset($ct_query);
@@ -261,16 +262,16 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 				{
 					foreach( $config['block'] as $bid_i )
 					{
-						$db->sql_query("INSERT INTO `" . NV_PREFIXLANG . "_" . $tmod_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid_i . "', '" . $new_id . "', '0')");
+						$db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $tmod_data . "_block (bid, id, weight) VALUES ('" . $bid_i . "', '" . $new_id . "', '0')");
 					}
 					
 					$config['block'][] = 0;
-					$db->sql_query("DELETE FROM `" . NV_PREFIXLANG . "_" . $tmod_data . "_block` WHERE `id` = " . $new_id . " AND `bid` NOT IN (" . implode(",", $config['block']) . ")");
+					$db->query("DELETE FROM " . NV_PREFIXLANG . "_" . $tmod_data . "_block WHERE id = " . $new_id . " AND bid NOT IN (" . implode(",", $config['block']) . ")");
 					
 					$array_block_cat_module = array();
-					$sql = "SELECT bid, adddefault, title FROM `" . NV_PREFIXLANG . "_" . $tmod_data . "_block_cat` ORDER BY `weight` ASC";
-					$result = $db->sql_query($sql);
-					while (list($bid_i, $adddefault_i, $title_i) = $db->sql_fetchrow($result))
+					$sql = "SELECT bid, adddefault, title FROM " . NV_PREFIXLANG . "_" . $tmod_data . "_block_cat ORDER BY weight ASC";
+					$result = $db->query($sql);
+					while (list($bid_i, $adddefault_i, $title_i) = $result->fetch( 3 ))
 					{
 						$array_block_cat_module[$bid_i] = $title_i;
 					}
@@ -304,9 +305,9 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 				nv_udel_content_module( $row['id'], $config['fmod'], $fmod_data ); // Xoa bai viet o chu de cu
 			}
 			
-			$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $fmod_data . "_" . $_cat . "`";
-			$result = $db->sql_query( $sql );
-			list( $check_num ) = $db->sql_fetchrow($result);
+			$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $fmod_data . "_" . $_cat . "";
+			$result = $db->query( $sql );
+			$check_num = $result->fetchColumn();
 			if( ! $check_num )unset( $config['fcat'][$_key] ); // Neu het bai viet roi thi loai chu de ra khoi danh sach
 
 			$c .= '<div class="center"><p class="center"><img src="' . NV_BASE_SITEURL . 'images/load_bar.gif" alt="Watting..."/></p><p>' . $u_lang['pross_s2'] . '</p></div>';
@@ -327,11 +328,11 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 			
 			foreach( $config['fcat1'] as $catid )
 			{
-				$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_cat` WHERE catid=" . $catid;
-				if ($db->sql_query($sql))
+				$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $mod_data . "_cat WHERE catid=" . $catid;
+				if ($db->query($sql))
 				{
-					$db->sql_query("DROP TABLE `" . NV_PREFIXLANG . "_" . $mod_data . "_" . $catid . "`");
-					$db->sql_query("DELETE FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_admins` WHERE `catid`=" . $catid);
+					$db->query("DROP TABLE " . NV_PREFIXLANG . "_" . $mod_data . "_" . $catid . "");
+					$db->query("DELETE FROM " . NV_PREFIXLANG . "_" . $mod_data . "_admins WHERE catid=" . $catid);
 				}
 			}
 			
@@ -349,9 +350,9 @@ if( $nv_Request->isset_request( 'action', 'get' ) )
 		nv_delete_all_cache();
 	}
 	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme($c);
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -365,12 +366,12 @@ if( $nv_Request->isset_request( 'setup', 'get' ) )
 	
 	$sources = $nv_Request->get_int( 'sources', 'get', 0 );
 	$topics = $nv_Request->get_int( 'topics', 'get', 0 );
-	$block = array_filter(array_unique(explode(",",filter_text_input( 'block', 'get', '', 1 ))));
+	$block = array_filter(array_unique(explode(",",$nv_Request->get_title( 'block', 'get', '', 1 ))) );
 	
-	$fmod = filter_text_input( 'fmod', 'get', '', 1 );
-	$tmod = filter_text_input( 'tmod', 'get', '', 1 );
-	$fcat_g = $fcat = filter_text_input( 'fcat', 'get', '', 1 );
-	$tcat = filter_text_input( 'tcat', 'get', '', 1 );
+	$fmod = $nv_Request->get_title( 'fmod', 'get', '', 1 );
+	$tmod = $nv_Request->get_title( 'tmod', 'get', '', 1 );
+	$fcat_g = $fcat = $nv_Request->get_title( 'fcat', 'get', '', 1 );
+	$tcat = $nv_Request->get_title( 'tcat', 'get', '', 1 );
 	if( !$fcat or !$tcat ) nv_u_exit($u_lang['error_setup']);
 	
 	$array_mod = nv_get_all_mod_news();
@@ -388,16 +389,16 @@ if( $nv_Request->isset_request( 'setup', 'get' ) )
 	if( ! $move_sub and $delcat and sizeof( $fcat ) > 1 ) nv_u_exit($u_lang['move_sub_error']);
 	if( ! $move_sub ) $fcat = array($fcat_g);
 	
-	if( $db->sql_numrows($db->sql_query("SELECT * FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$tmod) . "_sources` WHERE `sourceid`=" . $sources)) != 1 and $sources ) nv_u_exit($u_lang['error_so']);
-	if( $db->sql_numrows($db->sql_query("SELECT * FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$tmod) . "_topics` WHERE `topicid`=" . $topics)) != 1 and $topics ) nv_u_exit($u_lang['error_tp']);
-	if( $db->sql_numrows($db->sql_query("SELECT * FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$tmod) . "_block_cat` WHERE `bid`IN(" . implode(",",$block) . ")")) != sizeof($block) and $block ) nv_u_exit($u_lang['error_bl']);
+	if( $db->query("SELECT * FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$tmod) . "_sources WHERE sourceid=" . $sources)->rowCount() != 1 and $sources ) nv_u_exit($u_lang['error_so']);
+	if( $db->query("SELECT * FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$tmod) . "_topics WHERE topicid=" . $topics)->rowCount() != 1 and $topics ) nv_u_exit($u_lang['error_tp']);
+	if( $db->query("SELECT * FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$tmod) . "_block_cat WHERE bidIN(" . implode(",",$block) . ")")->rowCount() != sizeof($block) and $block ) nv_u_exit($u_lang['error_bl']);
 	
 	$num_new = 0;
 	foreach($fcat as $cat)
 	{
-		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . str_replace("-","_",$fmod) . "_" . $cat . "`";
-		$result = $db->sql_query( $sql );
-		list($num) = $db->sql_fetchrow( $result );
+		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . str_replace("-","_",$fmod) . "_" . $cat . "";
+		$result = $db->query( $sql );
+		$num = $result->fetchColumn();
 		$num_new += $num;
 		
 	}
@@ -419,9 +420,9 @@ if( $nv_Request->isset_request( 'setup', 'get' ) )
 		'h_nid' => array(), // ID bai viet da duoc chuyen
 	);
 	
-	$sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `module`='" . $tmod . "' AND `lang`='" . NV_LANG_DATA . "' AND `config_name` IN('homewidth','homeheight','blockwidth','blockheight')";
-	$result = $db->sql_query( $sql );
-	while( list( $config_name, $config_value ) = $db->sql_fetchrow( $result ) )
+	$sql = "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE module='" . $tmod . "' AND lang='" . NV_LANG_DATA . "' AND config_name IN('homewidth','homeheight','blockwidth','blockheight')";
+	$result = $db->query( $sql );
+	while( list( $config_name, $config_value ) = $result->fetch( 3 ) )
 	{
 		$array_config[$config_name] = $config_value;
 	}
@@ -433,15 +434,15 @@ if( $nv_Request->isset_request( 'setup', 'get' ) )
 	
 	$nv_Request->set_Session( 'utility_tmp', serialize( $array_config ) );
 		
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme($c);
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
 if( $nv_Request->isset_request( 'loadcat', 'get' ) )
 {
-	$mod = filter_text_input( 'loadcat', 'get', '' );
+	$mod = $nv_Request->get_title( 'loadcat', 'get', '' );
 	$array_cat = nv_get_cat( $mod );
 	
 	$c .= '<select>';	

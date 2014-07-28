@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.0
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2010 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Jun 04, 2011, 04:52:53 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Language Tiếng Việt
+ * @Createdate Jul 29, 2014, 12:13:24 AM
+ */
 
- if ( ! defined( 'NV_MAINFILE' ) ) die('Stop!!!');
+if ( ! defined( 'NV_MAINFILE' ) ) die('Stop!!!');
 
 $lang_translator['author'] = "VINADES.,JSC (contact@vinades.vn)";
 $lang_translator['createdate'] = "22/2/2011, 22:19";

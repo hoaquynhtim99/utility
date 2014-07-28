@@ -1,16 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 24-06-2011 10:35
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
 
 $c = '';
 
+/**
+ * nv_list_all_file()
+ * 
+ * @param string $dir
+ * @param string $base_dir
+ * @return
+ */
 function nv_list_all_file( $dir = '', $base_dir = '' )
 {
 	if( empty( $dir ) ) return array();
@@ -55,7 +63,7 @@ if( $nv_Request->isset_request( 'module', 'get' ) )
 	$project_copyright = $nv_Request->get_string( 'project_copyright', 'get', '' );
 	$project_createdate = $nv_Request->get_string( 'project_createdate', 'get', '' );
 	
-	$file_head_1 = "\n\n/**\n * @Project " . $project_name . " " . $project_version . "\n * @Author " . $project_author . " (" . $project_email . ")\n * @Copyright (C) " . $project_year . " " . $project_copyright . ". All rights reserved\n";
+	$file_head_1 = "\n\n/**\n * @Project " . $project_name . " " . $project_version . "\n * @Author " . $project_author . " (" . $project_email . ")\n * @Copyright (C) " . $project_year . " " . $project_copyright . ". All rights reserved\n * @License GNU/GPL version 2 or any later version\n";
 	$file_head_2 = " * @Createdate " . $project_createdate . "\n */\n\n";
 	
 	$module = $module ? array_filter(array_unique(array_map( 'trim', explode( ",", $module )))) : array();
@@ -133,47 +141,35 @@ if( $nv_Request->isset_request( 'module', 'get' ) )
 	die( $u_lang['ok'] . "<br />" . $result );
 }
 
-$c .= "<table class=\"tab1 fixtab\"><tbody><tr><td>" . $u_lang['info'] . "</td></tr></tbody></table>\n";
+$c .= "<table class=\"table table-striped table-bordered table-hover\"><tbody><tr><td>" . $u_lang['info'] . "</td></tr></tbody></table>\n";
 $c .= "<p><br /><strong>" . $u_lang['step1'] . "</strong></p>";
-$c .= "<table class=\"tab1 fixtab\">\n";
+$c .= "<table class=\"table table-striped table-bordered table-hover\">\n";
 $c .= "<col width=\"160\"/>\n";
 $c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_name'] . "</td>\n";
 $c .= "<td><input type=\"text\" id=\"project_name\" class=\"txt-half\" value=\"NUKEVIET\"/></td>\n";
 $c .= "</tr>\n";
-$c .= "</tbody>\n";
-$c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_version'] . "</td>\n";
-$c .= "<td><input type=\"text\" id=\"project_version\" class=\"txt-half\" value=\"3.x\"/></td>\n";
+$c .= "<td><input type=\"text\" id=\"project_version\" class=\"txt-half\" value=\"4.x\"/></td>\n";
 $c .= "</tr>\n";
-$c .= "</tbody>\n";
-$c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_author'] . "</td>\n";
 $c .= "<td><input type=\"text\" id=\"project_author\" class=\"txt-half\" value=\"PHAN TAN DUNG\"/></td>\n";
 $c .= "</tr>\n";
-$c .= "</tbody>\n";
-$c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_email'] . "</td>\n";
 $c .= "<td><input type=\"text\" id=\"project_email\" class=\"txt-half\" value=\"phantandung92@gmail.com\"/></td>\n";
 $c .= "</tr>\n";
-$c .= "</tbody>\n";
-$c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_year'] . "</td>\n";
 $c .= "<td><input type=\"text\" id=\"project_year\" class=\"txt-half\" value=\"" . date( 'Y', NV_CURRENTTIME ) . "\"/></td>\n";
 $c .= "</tr>\n";
-$c .= "</tbody>\n";
-$c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_copyright'] . "</td>\n";
 $c .= "<td><input type=\"text\" id=\"project_copyright\" class=\"txt-half\" value=\"PHAN TAN DUNG\"/></td>\n";
 $c .= "</tr>\n";
-$c .= "</tbody>\n";
-$c .= "<tbody>\n";
 $c .= "<tr>\n";
 $c .= "<td>" . $u_lang['project_createdate'] . "</td>\n";
 $c .= "<td><input type=\"text\" id=\"project_createdate\" class=\"txt-half\" value=\"" . date( 'M d, Y, h:i:s A', NV_CURRENTTIME ) . "\"/></td>\n";
@@ -182,7 +178,7 @@ $c .= "</tbody>\n";
 $c .= "</table>\n";
 
 $c .= "<p><br /><strong>" . $u_lang['step2'] . "</strong></p>";
-$c .= "<table class=\"tab1 fixtab\">\n";
+$c .= "<table class=\"table table-striped table-bordered table-hover\">\n";
 
 // Lay danh sach module
 $array_module = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
@@ -200,7 +196,7 @@ $c .= "</table>\n";
 
 $c .= "<p><br /><strong><a id=\"btSubmit\" href=\"javascript:void(0);\">" . $u_lang['step3'] . "</a></strong></p>";
 
-$c .= "<table class=\"tab1 fixtab\"><tbody><tr><td id=\"messageArea\"></td></tr></tbody></table>\n";
+$c .= "<table class=\"table table-striped table-bordered table-hover\"><tbody><tr><td id=\"messageArea\"></td></tr></tbody></table>\n";
 
 $c .= "
 <script type=\"text/javascript\">\n
@@ -224,5 +220,3 @@ $c .= "
 ";
 
 $contents = $c;
-
-?>

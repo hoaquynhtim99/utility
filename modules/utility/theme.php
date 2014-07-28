@@ -1,14 +1,21 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2011 VINADES.,JSC. All rights reserved
- * @Createdate 07-03-2011 20:15
+ * @Project NUKEVIET 4.x
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2014 PHAN TAN DUNG. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
 if ( ! defined( 'NV_IS_MOD_DGAT' ) ) die( 'Stop!!!' );
 
+/**
+ * nv_main_theme()
+ * 
+ * @param mixed $array
+ * @return
+ */
 function nv_main_theme( $array )
 {
     global $lang_global, $lang_module, $module_file, $module_info;
@@ -37,6 +44,12 @@ function nv_main_theme( $array )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * nv_guidelines_theme()
+ * 
+ * @param mixed $data
+ * @return
+ */
 function nv_guidelines_theme( $data )
 {
     global $lang_global, $lang_module, $module_file, $module_info, $module_name;
@@ -53,6 +66,14 @@ function nv_guidelines_theme( $data )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * nv_error_theme()
+ * 
+ * @param mixed $data
+ * @param mixed $error
+ * @param mixed $complete
+ * @return
+ */
 function nv_error_theme( $data, $error, $complete )
 {
     global $global_config, $lang_global, $lang_module, $module_file, $module_info, $module_name;
@@ -82,6 +103,12 @@ function nv_error_theme( $data, $error, $complete )
     return $xtpl->text( 'main' );
 }
 
+/**
+ * nv_die_theme()
+ * 
+ * @param mixed $info_die
+ * @return
+ */
 function nv_die_theme( $info_die )
 {
     global $module_file, $module_info, $lang_module;
@@ -93,10 +120,8 @@ function nv_die_theme( $info_die )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 	
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
-
-?>
