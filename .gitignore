@@ -2,6 +2,8 @@
 /.htaccess
 /CJzip.php
 /config.php
+/CHANGELOG.txt
+/COPYRIGHT.txt
 /favicon.ico
 /index.php
 /LICENSE.txt
