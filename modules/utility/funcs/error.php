@@ -57,7 +57,6 @@ if( empty( $error ) )
 			$complete = true;
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET error=1 WHERE alias=" . $db->quote( $array_op[1] );
 			$db->query( $sql );
-			//$xxx->closeCursor();
 			
 			$dgerrored[] = $array_op[1];
 			$dgerrored = serialize( $dgerrored );
@@ -75,5 +74,3 @@ $contents = nv_error_theme( $list[0], $error, $complete );
 include NV_ROOTDIR . '/includes/header.php';
 echo ( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

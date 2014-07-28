@@ -20,7 +20,7 @@ if ( $nv_Request->isset_request( 'rating', 'post' ) )
 	
 	$dgraed = $nv_Request->get_string( 'dgraed', 'session', '' );
 	$dgraed = ! empty( $dgraed ) ? unserialize( $dgraed ) : array();
-                
+    
 	if ( in_array( $id, $dgraed ) )  die( "Error!" );
 	
 	$dgraed[] = $id;
@@ -52,5 +52,3 @@ if ( $nv_Request->isset_request( 'rating', 'post' ) )
 }
 
 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
-
-?>

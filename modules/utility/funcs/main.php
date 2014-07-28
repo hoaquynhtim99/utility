@@ -65,11 +65,11 @@ $array = array();
 foreach( $list as $row )
 {
 	$array[] = array(
-		"title" => $row['title'],  //
-		"alias" => $row['alias'],  //
-		"images" => $row['images'],  //
-		"introtext" => $row['introtext'],  //
-		"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . '&amp;' . NV_OP_VARIABLE . "=" . $row['alias']  //
+		"title" => $row['title'],
+		"alias" => $row['alias'],
+		"images" => $row['images'],
+		"introtext" => $row['introtext'],
+		"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . '&amp;' . NV_OP_VARIABLE . "=" . $row['alias']
 	);
 }
 
@@ -78,5 +78,3 @@ $contents = nv_main_theme( $array );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

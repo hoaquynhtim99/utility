@@ -25,9 +25,9 @@ else
 
     while ( list( $id, $title, $alias, $addtime ) = $result->fetch( 3 ) )
     {
-        $url[] = array( //
-            'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias, //
-            'publtime' => $addtime //
+        $url[] = array(
+            'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias,
+            'publtime' => $addtime
 		);
     }
     
@@ -37,5 +37,3 @@ else
 
 nv_xmlSitemap_generate( $url );
 die();
-
-?>
