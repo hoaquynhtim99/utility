@@ -39,7 +39,7 @@ $lang_module['like'] = "Thích";
 $lang_module['dislike'] = "Không thích";
 
 $lang_module['error_save'] = "Lỗi: Không thể lưu lại dữ liệu";
-$lang_module['error_title'] = "Lỗi: tiêu đề không được để trống";
+$lang_module['error_ctitle'] = "Lỗi: tiêu đề không được để trống";
 $lang_module['error_update'] = "Lỗi: Không thể cập nhật dữ liệu";
 $lang_module['error_alias'] = "Lỗi: Liên kết tĩnh chỉ gồm chữ cái thường, số và có độ dài không quá 50 kí tự";
 $lang_module['error_exist'] = "Lỗi: Tiện ích này đã có";

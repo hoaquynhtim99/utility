@@ -4,6 +4,7 @@ Bảng root
 
 Không còn hàm nv_set_allow
 	=> Bỏ hết các who_view
+	=> Thay nv_set_allow => 
 
 hàm nv_open_browse_file thay thành nv_open_browse
 

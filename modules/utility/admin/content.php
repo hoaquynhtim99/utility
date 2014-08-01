@@ -8,7 +8,7 @@
  * @Createdate Jul 29, 2014, 12:13:24 AM
  */
 
-if ( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_DGAT_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['content_title'];
 
@@ -22,7 +22,7 @@ if( $id )
 	$result = $db->query( $sql );
 	$check = $result->rowCount();
 		
-	if ( $check != 1 )
+	if( $check != 1 )
 	{
 		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 	}
@@ -64,7 +64,7 @@ else
 	);
 }
 
-if ( $nv_Request->isset_request( 'submit', 'post' ) )
+if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$array['delcache'] = $nv_Request->get_int( 'delcache', 'post', 0 );
 	$array['iscache'] = $nv_Request->get_int( 'iscache', 'post', 0 );
@@ -85,11 +85,11 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array['logo'] = empty( $array['logo'] ) ? "" : substr ( $array['logo'], strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 	
 	// Check error
-	if ( empty ( $array['title'] ) )
+	if( empty ( $array['title'] ) )
 	{
-		$error = $lang_module['error_title'];
+		$error = $lang_module['error_ctitle'];
 	}
-	elseif ( ! preg_match( "/^([0-9a-z\-]+)$/", $array['alias'] ) )
+	elseif( ! preg_match( "/^([0-9a-z\-]+)$/", $array['alias'] ) )
 	{
 		$error = $lang_module['error_alias'];
 	}
@@ -107,9 +107,9 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $array['alias'] );
 			$result = $db->query( $sql );
-			list ( $check_exist ) = $db->sql_fetchrow( $result );
+			list( $check_exist ) = $result->fetch( 3 );
 			
-			if ( $check_exist )
+			if( $check_exist )
 			{
 				$error = $lang_module['error_exist'];
 			}
@@ -117,7 +117,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$sql = "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "";
 				$result = $db->query( $sql );
-				list ( $weight ) = $db->sql_fetchrow( $result );
+				list ( $weight ) = $result->fetch( 3 );
 				$new_weight = $weight + 1;
 
 				$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " VALUES (
@@ -139,12 +139,12 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 				
 				$id_result = $db->insert_id( $sql );
 				
-				if ( $id_result )
+				if( $id_result )
 				{
 					//$xxx->closeCursor();
 					nv_del_moduleCache( $module_name );
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_add'], $array['title'], $admin_info['userid'] );
-					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
 					die();
 				}
 				else
@@ -157,9 +157,9 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $array['alias'] ) . " AND id!=" . $id;
 			$result = $db->query( $sql );
-			list ( $check_exist ) = $db->sql_fetchrow( $result );
+			list ( $check_exist ) = $result->fetch( 3 );
 			
-			if ( $check_exist )
+			if( $check_exist )
 			{
 				$error = $lang_module['error_exist'];
 			}
@@ -178,7 +178,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 					groups_view=" . $db->quote( implode( ",", $array['groups_view'] ) ) . "
 				WHERE id =" . $id;
 					
-				if ( $db->query( $sql ) )
+				if( $db->query( $sql ) )
 				{
 					// Xoa ung dung cu neu sua ailas
 					if( $array['alias'] != $array_old['alias'] )
@@ -196,7 +196,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 						//$xxx->closeCursor();
 						nv_del_moduleCache( $module_name );
 						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $array_old['title'] . "&nbsp;=&gt;&nbsp;" . $array['title'], $admin_info['userid'] );
-						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
 						exit();
 					}
 				}
@@ -210,16 +210,16 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 }
 	
 // Build description
-if ( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
-if ( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
-if ( ! empty( $array['guide'] ) ) $array['guide'] = nv_htmlspecialchars( $array['guide'] );
+if( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
+if( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
+if( ! empty( $array['guide'] ) ) $array['guide'] = nv_htmlspecialchars( $array['guide'] );
 
-if ( defined( 'NV_EDITOR' ) )
+if( defined( 'NV_EDITOR' ) )
 {
 	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
 }
 
-if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
 	$array['description'] = nv_aleditor( 'description', '100%', '200px', $array['description'] );
 	$array['guide'] = nv_aleditor( 'guide', '100%', '200px', $array['guide'] );
@@ -230,15 +230,15 @@ else
 	$array['guide'] = "<textarea style=\"width:100%; height:200px\" name=\"guide\" id=\"guide\">" . $array['guide'] . "</textarea>";
 }
 	
-if ( ! empty ( $array['images'] ) ) $array['images'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['images']; 
-if ( ! empty ( $array['logo'] ) ) $array['logo'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['logo']; 
+if( ! empty ( $array['images'] ) ) $array['images'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['images']; 
+if( ! empty ( $array['logo'] ) ) $array['logo'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['logo']; 
 
 // Int to string
 $array['iscache'] = $array['iscache'] ? " checked=\"checked\"" : "";
 
 $groups_view = $array['groups_view'];
 $array['groups_view'] = array();
-if ( ! empty( $groups_list ) )
+if( ! empty( $groups_list ) )
 {
 	foreach ( $groups_list as $key => $title )
 	{
@@ -261,13 +261,13 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/images' );
 
 // Prase error
-if ( ! empty ( $error ) )
+if( ! empty ( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
 }
     
-if ( ! empty( $array['groups_view'] ) )
+if( ! empty( $array['groups_view'] ) )
 {
 	foreach ( $array['groups_view'] as $group )
 	{

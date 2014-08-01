@@ -31,7 +31,7 @@ if( ( $op == "main" ) and isset( $array_op[0] ) )
 	$golbaldata = $result->fetch();
 	$golbaldata['dir'] = $golbaldata['alias'];
 	
-	if ( ! nv_set_allow( $golbaldata['who_view'], $golbaldata['groups_view'] ) )
+	if ( ! nv_user_in_groups( $golbaldata['groups_view'] ) )
 	{
 		nv_info_die( $lang_module['notaloww_title'], $lang_module['notaloww_title'], $lang_module['notaloww_content'] );
 	}
