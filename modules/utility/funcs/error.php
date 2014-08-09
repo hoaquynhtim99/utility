@@ -28,6 +28,8 @@ if( empty( $list ) ) nv_info_die( $lang_global['error_404_title'], $lang_global[
 
 $list[0]['form_action'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . '&amp;' . NV_OP_VARIABLE . "=error/" . $list[0]['alias'];
 
+$page_title = $lang_module['send_error'] . ' ' . $list[0]['title'];
+
 if( empty( $error ) )
 {
 	if ( $nv_Request->isset_request( 'submit', 'post' ) )
@@ -69,8 +71,10 @@ if( empty( $error ) )
 	}
 }
 
+$global_config['mudim_showpanel'] = false;
+
 $contents = nv_error_theme( $list[0], $error, $complete );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo ( $contents );
+echo nv_site_theme( $contents, false );
 include NV_ROOTDIR . '/includes/footer.php';

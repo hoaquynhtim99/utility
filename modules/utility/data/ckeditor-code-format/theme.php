@@ -10,7 +10,13 @@
 
 if ( ! defined( 'NV_IS_MOD_DGAT' ) ) die( 'Stop!!!' );
 
-function nv_ckeditor_format_code_theme()
+/**
+ * nv_ckeditor_format_code_theme()
+ * 
+ * @param mixed $array
+ * @return
+ */
+function nv_ckeditor_format_code_theme( $array )
 {
     global $lang_global, $lang_module, $module_file, $module_info, $array_op, $my_head;
 
@@ -27,6 +33,12 @@ function nv_ckeditor_format_code_theme()
 
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'GLANG', $lang_global );
+    $xtpl->assign( 'DATA', $array );
+
+	if( ! empty( $array['guide'] ) )
+	{
+		$xtpl->parse( 'main.guide' );
+	}
 
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );

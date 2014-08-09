@@ -17,6 +17,7 @@ if( $is_load_data )
 	$description = $golbaldata['introtext'];
 	
 	$golbaldata['url_guide'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . '&amp;' . NV_OP_VARIABLE . "=guidelines/" . $golbaldata['alias'];
+	$golbaldata['url_error'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . '&' . NV_OP_VARIABLE . "=error/" . $golbaldata['alias'];
 	
 	// Goi file css
 	if( is_file( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $array_op[0] . "/style.css" ) )

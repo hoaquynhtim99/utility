@@ -10,7 +10,7 @@
 
 if ( ! defined( 'NV_IS_MOD_DGAT' ) ) die( 'Stop!!!' );
 
-$contents = nv_ckeditor_format_code_theme();
+$contents = nv_ckeditor_format_code_theme( $golbaldata );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

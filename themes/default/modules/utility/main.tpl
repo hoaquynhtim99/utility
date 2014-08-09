@@ -7,7 +7,7 @@
 			<div class="img">
 				<a href="{ROW.url}" title="{ROW.title}"><img src="{ROW.images}" alt="{ROW.images}" width="100"/></a>
 			</div>
-			<h1><a href="{ROW.url}" title="{ROW.title}">{ROW.title}</a></h1>
+			<h3><a href="{ROW.url}" title="{ROW.title}">{ROW.title}</a></h3>
 			<p>{ROW.introtext}</p>
 		</div>
 	</div>
